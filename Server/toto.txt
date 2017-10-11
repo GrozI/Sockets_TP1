@@ -1,0 +1,39 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package server;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.file.Path;
+import java.nio.file.*;
+import java.io.*;
+/**
+ *
+ * @author grozir
+ */
+public class FTPFile {
+  String filename = "";
+  public FTPFile(String name){
+      this.filename = name;
+  }
+  public void getRequest()
+  {
+      java.io.File f = new java.io.File("./" + filename);
+      boolean  a = f.exists();
+      if(a)
+      {
+          System.out.println("ça va, ca existe");
+      }
+      else
+      {
+          System.out.println("NOOOOOOOOOOOOOOOOOOOOON");
+      }
+  }
+}
