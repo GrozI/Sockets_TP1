@@ -11,6 +11,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.io.File;
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.ObjectInputStream;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 /**
  *
@@ -32,6 +36,13 @@ public class SARTP1 {
           System.out.println("connécté à "+hostname+" sur le port "+port);
           
           InputStream timeStream = theSocket.getInputStream();
+          DataInputStream dataStream = new DataInputStream((timeStream));
+          int c = dataStream.readInt();
+          
+          
+      
+          //ByteBuffer.wrap(bytes).getlong()
+          
           
           
           /*int b;

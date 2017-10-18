@@ -64,17 +64,27 @@ public class SimpleDaytimeServer {
       //System.out.println("response"+response.toString());
       
       //FTPcmd message = new FTPcmd("name","content");
-      //ByteBuffer response = ByteBuffer.wrap(BytesUtil.toByteArray(message));
+      byte[] object = BytesUtil.toByteArray("tfgerfuexilrujgit");
+      
+      int len = object.length;
+      System.out.println(len);
+      for (int i=0;i<len;i++){
+          System.out.print(object[i]+ " ");
+      }
+      ByteBuffer leng = ByteBuffer.wrap(BytesUtil.toByteArray(len));
+      ByteBuffer response = ByteBuffer.wrap(object);
+      
       //byte[] byteArray = {56,58};
       //System.out.println(byteArray[0] +" "+byteArray[1]);
       //ByteBuffer response = ByteBuffer.wrap(byteArray);
       
-      File data = new File("test.odt");
-      byte[] byteArray = BytesUtil.toByteArray(data);
-      ByteBuffer response = ByteBuffer.wrap(byteArray);
+      //File data = new File("test.odt");
+      //byte[] byteArray = BytesUtil.toByteArray(data);
+      //ByteBuffer response = ByteBuffer.wrap(byteArray);
       
       // Send the response to the client and disconnect.
-      client.write(response);
+      //client.write(leng);
+      client.write(leng);
       client.close();
     }
   }
