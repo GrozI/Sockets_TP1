@@ -23,6 +23,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.io.File;
+import java.io.OutputStream;
 
 
 /**
@@ -57,22 +58,13 @@ public class SimpleDaytimeServer {
       // Wait for a client to connect
       SocketChannel client = server.accept();
 
+      OutputStream os = client.socket().getOutputStream();
+      
       // Build response string, wrap, and encode to bytes
       
       //String date = new java.util.Date().toString() + "\r\n";
       //ByteBuffer response = encoder.encode(CharBuffer.wrap(date));
       //System.out.println("response"+response.toString());
-      
-      //FTPcmd message = new FTPcmd("name","content");
-      byte[] object = BytesUtil.toByteArray("tfgerfuexilrujgit");
-      
-      int len = object.length;
-      System.out.println(len);
-      for (int i=0;i<len;i++){
-          System.out.print(object[i]+ " ");
-      }
-      ByteBuffer leng = ByteBuffer.wrap(BytesUtil.toByteArray(len));
-      ByteBuffer response = ByteBuffer.wrap(object);
       
       //byte[] byteArray = {56,58};
       //System.out.println(byteArray[0] +" "+byteArray[1]);
@@ -84,7 +76,8 @@ public class SimpleDaytimeServer {
       
       // Send the response to the client and disconnect.
       //client.write(leng);
-      client.write(leng);
+      os.write(4);
+      os.close();
       client.close();
     }
   }
