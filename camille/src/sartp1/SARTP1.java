@@ -36,9 +36,6 @@ public class SARTP1 {
           System.out.println("connécté à "+hostname+" sur le port "+port);
           
           InputStream is = theSocket.getInputStream();
- 
-          int c = is.read();
-          System.out.println(c);
           
       
           //ByteBuffer.wrap(bytes).getlong()

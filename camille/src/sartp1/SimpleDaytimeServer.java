@@ -23,7 +23,12 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
@@ -58,8 +63,38 @@ public class SimpleDaytimeServer {
       // Wait for a client to connect
       SocketChannel client = server.accept();
 
-      OutputStream os = client.socket().getOutputStream();
+      try 
+      {
+          OutputStream os = client.socket().getOutputStream();
       
+      
+          File infile = new File("test.odt");
+          System.out.println(infile.exists());
+          
+          FileInputStream instream = null;
+          instream = new FileInputStream(infile);
+          
+          
+          byte[] buffer = new byte[1024];
+          
+          int length;
+          
+          while((length = instream.read(buffer)) > 0)
+          {
+              System.out.println("sfj");
+              os.write(buffer,0,length);
+          }
+          
+          instream.close();
+          os.close();
+          
+          System.out.println("l'envoi du fichier a marché =)");
+          
+      }
+      catch(IOException ioe)
+      {
+          ioe.printStackTrace();
+      }
       // Build response string, wrap, and encode to bytes
       
       //String date = new java.util.Date().toString() + "\r\n";
@@ -76,8 +111,6 @@ public class SimpleDaytimeServer {
       
       // Send the response to the client and disconnect.
       //client.write(leng);
-      os.write(4);
-      os.close();
       client.close();
     }
   }
