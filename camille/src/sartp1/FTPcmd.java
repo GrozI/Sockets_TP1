@@ -5,33 +5,29 @@
  */
 package sartp1;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+
 /**
  *
  * @author gardellc
  */
-public class FTPcmd {
+public class FTPcmd implements Serializable{
     private String type; 
-    private String content;
+    private String filename;
 
-    public FTPcmd(String type, String content) {
+    public FTPcmd(String type, String filename) {
         this.type = type;
-        this.content = content;
+        this.filename = filename;
     }
     
-    public String getType() {
-        return type;
+    public void send(OutputStream os){
+        
     }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    
+    public void read(InputStream is){
+        
     }
     
 }

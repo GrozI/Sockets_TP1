@@ -12,6 +12,7 @@ import java.net.UnknownHostException;
 import java.io.File;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -34,43 +35,85 @@ public class SARTP1 {
         // TODO code application logic here
         String hostname = "localhost";
         int port = 2000;
-        String repertory = System.getProperty("user.dir")+"/clientFiles";
         
         try {
+
           Socket theSocket = new Socket(hostname, port );
           System.out.println("connécté à "+hostname+" sur le port "+port);
           
-          ////////////////recuperation du fichier test//////////////////
           InputStream is = theSocket.getInputStream();
-          FileOutputStream outstream = null;
+          OutputStream os = theSocket.getOutputStream();
+          
+          String filename = "test.odt";
+          String cmd = "GET_REQUEST";
+          
+          /////////////Envoie de la commande et du nom de fichier//////////////
+          DataOutputStream osObject = new DataOutputStream(os);
+          osObject.writeUTF(cmd);
+          osObject.writeUTF(filename);
+          
           
           int indice = is.read();
           System.out.println(indice);
           
-          String path = System.getProperty("user.dir");
-          System.out.println("current dir = " + path);
-
-          String filename = "copieTestClient";
-            
+          switch (cmd){
+                case "GET_REQUEST":
+                    FileOutputStream outstream = null;
           
-          File outfile = new File(path+"/"+filename+indice+".odt");
-          
-          outstream = new FileOutputStream(outfile);
+                    String path = System.getProperty("user.dir");
+          //          System.out.println("current dir = " + path);
+                    File outfile = new File(path+"/"+"client"+indice+filename);
 
-          byte[] buffer = new byte[1024];
+                    outstream = new FileOutputStream(outfile);
 
-          int length;
+                    byte[] buffer = new byte[1024];
 
-          while((length = is.read(buffer)) > 0)
-            {
-                outstream.write(buffer,0,length);
-            }
+                    int length;
+
+                    while((length = is.read(buffer)) > 0)
+                      {
+                          outstream.write(buffer,0,length);
+                      }
+          //          is.close();
+                    outstream.close();
+
+                    System.out.println("l'écriture du fichier a marché =)");
+                    break;
+                case "PUT_REQUEST":
+        //          //on cree un objet file pour le fichier que detient le client
+        //          File infile = new File(filename);
+        //          System.out.println(infile.exists());
+        //          
+        //          //on cree un flux qui permet de communiquer avec le fichier
+        //          FileInputStream instream = null;
+        //          instream = new FileInputStream(infile);
+        //          
+        //          //on cree un buffer
+        //          byte[] buffer2 = new byte[1024];
+        //          
+        //          int length2;
+        //          
+        //          while((length2 = instream.read(buffer2)) > 0)
+        //          {
+        ////              System.out.println("sfj");
+        //              os.write(buffer2,0,length2);
+        //          }
+        //          
+        //          instream.close();
+        ////          os.close();
+        //          
+        //          System.out.println("l'envoi du fichier a marché =)");
+                    break;
+                default:
+                    System.out.println("la commande passée est inconnue");
+          }
+          os.close();
           is.close();
-          outstream.close();
-
-          System.out.println("l'écriture du fichier a marché =)");
+          
+          
 
          
+
           //ByteBuffer.wrap(bytes).getlong()
           
           
