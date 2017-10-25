@@ -58,30 +58,39 @@ public class SimpleDaytimeServer {
     
     // Get an encoder for converting strings to bytes
     CharsetEncoder encoder = Charset.forName("US-ASCII").newEncoder();
-
+    //nombre de connexion faites sur la socket ouverte cote serveur
+    int numDownload = 0;
+    
     for (;;) { // Loop forever, processing client connections
       // Wait for a client to connect
       SocketChannel client = server.accept();
-
+      numDownload++;
+      System.out.println("pour la "+numDownload+"e fois");
+      
       try 
       {
+          //on recupere le flux d'envoie
           OutputStream os = client.socket().getOutputStream();
+          
+          //on ecrit dans le flux d'envoie le numero du fichier
+          os.write(numDownload);
       
-      
+          //on cree un objet file pour le fichier que detient le serveur
           File infile = new File("test.odt");
           System.out.println(infile.exists());
           
+          //on cree un flux qui permet de communiquer avec le fichier
           FileInputStream instream = null;
           instream = new FileInputStream(infile);
           
-          
+          //on cree un buffer
           byte[] buffer = new byte[1024];
           
           int length;
           
           while((length = instream.read(buffer)) > 0)
           {
-              System.out.println("sfj");
+//              System.out.println("sfj");
               os.write(buffer,0,length);
           }
           

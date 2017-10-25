@@ -12,9 +12,14 @@ import java.net.UnknownHostException;
 import java.io.File;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -35,9 +40,37 @@ public class SARTP1 {
           Socket theSocket = new Socket(hostname, port );
           System.out.println("connécté à "+hostname+" sur le port "+port);
           
+          ////////////////recuperation du fichier test//////////////////
           InputStream is = theSocket.getInputStream();
+          FileOutputStream outstream = null;
           
-      
+          int indice = is.read();
+          System.out.println(indice);
+          
+          String path = System.getProperty("user.dir");
+          System.out.println("current dir = " + path);
+
+          String filename = "copieTestClient";
+            
+          
+          File outfile = new File(path+"/"+filename+indice+".odt");
+          
+          outstream = new FileOutputStream(outfile);
+
+          byte[] buffer = new byte[1024];
+
+          int length;
+
+          while((length = is.read(buffer)) > 0)
+            {
+                outstream.write(buffer,0,length);
+            }
+          is.close();
+          outstream.close();
+
+          System.out.println("l'écriture du fichier a marché =)");
+
+         
           //ByteBuffer.wrap(bytes).getlong()
           
           
