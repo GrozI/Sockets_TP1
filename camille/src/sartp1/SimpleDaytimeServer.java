@@ -50,7 +50,7 @@ public class SimpleDaytimeServer {
     if (args.length > 0)
       port = Integer.parseInt(args[0]);
     
-    String repertory = System.getProperty("user.dir")+"/serverFiles";
+    String repertory = System.getProperty("user.dir");
     System.out.println(repertory);
     
     // Create a channel to listen for connections on.
@@ -64,15 +64,14 @@ public class SimpleDaytimeServer {
     // Get an encoder for converting strings to bytes
     CharsetEncoder encoder = Charset.forName("US-ASCII").newEncoder();
     //nombre de connexion faites sur la socket ouverte cote serveur
-    int numDownload = 0;
+    int numConnect = 0;
     
     
     for (;;) { // Loop forever, processing client connections
         // Wait for a client to connect
-        SocketChannel client = server.accept();     
-
-        numDownload++;
-        System.out.println("pour la "+numDownload+"e fois");
+        SocketChannel client = server.accept();
+        System.out.println("Connexion ouverte");
+        numConnect++;
 
         try 
         {
@@ -87,17 +86,22 @@ public class SimpleDaytimeServer {
             DataInputStream isObject = new DataInputStream(is);
             String cmd = isObject.readUTF();
             String file = isObject.readUTF();
-            System.out.println(cmd+" "+file);
 
             //on ecrit dans le flux d'envoie le numero du fichier
-            os.write(numDownload);
+            os.write(numConnect);
+            
+            System.out.println("le Server est connecté pour la "+numConnect+"ième fois et recoit un "+
+                    cmd+" de "+file);
+            
+            //on cree un buffer
+            byte[] buffer = new byte[1024];
+            int length;
             
             
-    
     
             switch (cmd){
                 case "GET_REQUEST":
-                    System.out.println("c'est bon!");
+//                    System.out.println("c'est bon!");
                     //on cree un objet file pour le fichier que detient le serveur
                     File infile = new File(file);
                     System.out.println(infile.exists());
@@ -106,11 +110,6 @@ public class SimpleDaytimeServer {
                     FileInputStream instream = null;
                     instream = new FileInputStream(infile);
 
-                    //on cree un buffer
-                    byte[] buffer = new byte[1024];
-
-                    int length;
-
                     while((length = instream.read(buffer)) > 0)
                     {
         //              System.out.println("sfj");
@@ -118,11 +117,27 @@ public class SimpleDaytimeServer {
                     }
 
                     instream.close();
-                    
-
-                    System.out.println("l'envoi du fichier a marché =)");
                     break;
                 case "PUT_REQUEST":
+                    FileOutputStream outstream = null;
+          
+                    String path = System.getProperty("user.dir");
+          //        System.out.println("current dir = " + path);
+                    File outfile = new File(path+"S"+numConnect+file);
+                    System.out.println("le fichier existe : "+outfile.exists());
+                    if (outfile.exists()){
+                        int i=1;
+                        //outfile =  new File(path)
+                    }
+                    
+                    outstream = new FileOutputStream(outfile);
+
+                    while((length = is.read(buffer)) > 0)
+                      {
+                          outstream.write(buffer,0,length);
+                      }
+                    
+                    outstream.close();
                     break;
                 default:
                     System.out.println("la commande passée est inconnue");
@@ -133,31 +148,14 @@ public class SimpleDaytimeServer {
         os.close();
         is.close();
             
-            
+        System.out.println("Connexion fermée");   
 
         }
         catch(IOException ioe)
         {
             ioe.printStackTrace();
         }
-
-
-        // Build response string, wrap, and encode to bytes
-
-        //String date = new java.util.Date().toString() + "\r\n";
-        //ByteBuffer response = encoder.encode(CharBuffer.wrap(date));
-        //System.out.println("response"+response.toString());
-
-        //byte[] byteArray = {56,58};
-        //System.out.println(byteArray[0] +" "+byteArray[1]);
-        //ByteBuffer response = ByteBuffer.wrap(byteArray);
-
-        //File data = new File("test.odt");
-        //byte[] byteArray = BytesUtil.toByteArray(data);
-        //ByteBuffer response = ByteBuffer.wrap(byteArray);
-
-        // Send the response to the client and disconnect.
-        //client.write(leng);
+        
         client.close();
     }
   }
