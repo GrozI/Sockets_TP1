@@ -87,6 +87,10 @@ public class SimpleDaytimeServer {
             String cmd = isObject.readUTF();
             String file = isObject.readUTF();
 
+            /////////////Pour envoyer des chaines de caractères//////////////
+            DataOutputStream osObject = new DataOutputStream(os);
+            
+            
             //on ecrit dans le flux d'envoie le numero du fichier
             os.write(numConnect);
             
@@ -106,17 +110,24 @@ public class SimpleDaytimeServer {
                     File infile = new File(file);
                     System.out.println(infile.exists());
 
-                    //on cree un flux qui permet de communiquer avec le fichier
-                    FileInputStream instream = null;
-                    instream = new FileInputStream(infile);
+                    if (infile.exists()){
+                        FileInputStream instream = null;
+                        instream = new FileInputStream(infile);
 
-                    while((length = instream.read(buffer)) > 0)
-                    {
-        //              System.out.println("sfj");
-                        os.write(buffer,0,length);
+                        while((length = instream.read(buffer)) > 0)
+                        {
+            //              System.out.println("sfj");
+                            os.write(buffer,0,length);
+                        }
+
+                        instream.close();
+                        osObject.writeUTF("GET_REPLY");
+                        os.write(0);
+                    } else {
+                        osObject.writeUTF("GET_REPLY");
+                        os.write(1);
                     }
-
-                    instream.close();
+                    //on cree un flux qui permet de communiquer avec le fichier
                     break;
                 case "PUT_REQUEST":
                     FileOutputStream outstream = null;
@@ -144,7 +155,8 @@ public class SimpleDaytimeServer {
             }
             
             
-
+        osObject.close();
+        isObject.close();
         os.close();
         is.close();
             
@@ -157,6 +169,7 @@ public class SimpleDaytimeServer {
         }
         
         client.close();
+        System.out.println("serveur fermé");
     }
   }
 }

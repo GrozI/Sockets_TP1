@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
@@ -44,7 +45,7 @@ public class SARTP1 {
           InputStream is = theSocket.getInputStream();
           OutputStream os = theSocket.getOutputStream();
           
-          String cmd = "PUT_REQUEST";
+          String cmd = "GET_REQUEST";
           String filename = "test.odt";
           
           
@@ -53,6 +54,7 @@ public class SARTP1 {
           osObject.writeUTF(cmd);
           osObject.writeUTF(filename);
           
+          DataInputStream isObject = new DataInputStream(is);
           
           int indice = is.read();
           
@@ -63,21 +65,27 @@ public class SARTP1 {
           
           switch (cmd){
                 case "GET_REQUEST":
-                    FileOutputStream outstream = null;
+                    String response = isObject.readUTF();
+                    int result = is.read();
+                    
+                    System.out.println("réponse : "+response+" "+result);
+                    if(result == 0){
+                        FileOutputStream outstream = null;
           
-                    String path = System.getProperty("user.dir");
-          //          System.out.println("current dir = " + path);
-                    File outfile = new File(path+"C"+indice+filename);
+                        String path = System.getProperty("user.dir");
+              //          System.out.println("current dir = " + path);
+                        File outfile = new File(path+"C"+indice+filename);
 
-                    outstream = new FileOutputStream(outfile);
+                        outstream = new FileOutputStream(outfile);
 
-                    while((length = is.read(buffer)) > 0)
-                      {
-                          outstream.write(buffer,0,length);
-                      }
-                    outstream.close();
-
-                    System.out.println("l'écriture du fichier a marché =)");
+                        while((length = is.read(buffer)) > 0)
+                          {
+                              outstream.write(buffer,0,length);
+                          }
+                        outstream.close();
+                        System.out.println("l'écriture du fichier a marché =)");
+                    }
+                    
                     break;
                 case "PUT_REQUEST":
                   //on cree un objet file pour le fichier que detient le client
@@ -111,7 +119,7 @@ public class SARTP1 {
           System.err.println(ex);
         } catch (IOException ex) {
           System.err.println(ex);
-        }
+        } 
         
         
     }
