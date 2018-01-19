@@ -27,7 +27,7 @@ import java.nio.file.Paths;
  *
  * @author gardellc
  */
-public class SARTP1 {
+public class Client {
 
     /**
      * @param args the command line arguments
@@ -73,7 +73,7 @@ public class SARTP1 {
                         FileOutputStream outstream = null;
           
                         String path = System.getProperty("user.dir");
-              //          System.out.println("current dir = " + path);
+                        System.out.println("current dir = " + path);
                         File outfile = new File(path+"C"+indice+filename);
 
                         outstream = new FileOutputStream(outfile);

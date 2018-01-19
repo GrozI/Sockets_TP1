@@ -41,17 +41,21 @@ import java.nio.file.Paths;
  * implementation lacks meaningful exception handling and cannot handle UDP
  * connections.
  */
-public class SimpleDaytimeServer {
+public class Server {
   public static void main(String args[]) throws java.io.IOException {
     // RFC867 specifies port 13 for this service. On Unix platforms,
     // you need to be running as root to use that port, so we allow
     // this service to use other ports for testing.
+    
     int port = 2000; //au dessus de 1024 sur linux
-    if (args.length > 0)
-      port = Integer.parseInt(args[0]);
+    if (args.length > 0){
+        port = Integer.parseInt(args[0]);
+    }
+      
     
     String repertory = System.getProperty("user.dir");
-    System.out.println(repertory);
+    
+    System.out.println("current dir: "+repertory);
     
     // Create a channel to listen for connections on.
     ServerSocketChannel server = ServerSocketChannel.open();
