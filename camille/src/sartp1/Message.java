@@ -5,10 +5,37 @@
  */
 package sartp1;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  *
  * @author gardellc
  */
-public class Message {
+public abstract class Message {
+    protected String name;
+    protected String filename;
+
+    public Message() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
     
+    
+    
+    public void send(OutputStream os) throws IOException{
+        DataOutputStream osObject = new DataOutputStream(os);
+        osObject.writeUTF(this.name);
+        osObject.writeUTF(this.filename);
+    };
+    
+    public abstract void receive(InputStream is);
 }

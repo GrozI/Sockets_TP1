@@ -45,51 +45,51 @@ public class Client {
           InputStream is = theSocket.getInputStream();
           OutputStream os = theSocket.getOutputStream();
           
-          String cmd = "GET_REQUEST";
-          String filename = "test.odt";
-          
+//          String cmd = "GET_REQUEST";
+//          String filename = "test.odt";
+          Message message = new Get("test.odt");
           
           /////////////Envoie de la commande et du nom de fichier//////////////
-          DataOutputStream osObject = new DataOutputStream(os);
-          osObject.writeUTF(cmd);
-          osObject.writeUTF(filename);
+//          DataOutputStream osObject = new DataOutputStream(os);
+//          osObject.writeUTF(message.name);
+//          osObject.writeUTF(message.filename);
           
           DataInputStream isObject = new DataInputStream(is);
           
           int indice = is.read();
           
-          System.out.println("le Client envoie un "+cmd+" de "+filename);
+          System.out.println("le Client envoie un "+message.name+" de "+message.filename);
           
           byte[] buffer = new byte[1024];
           int length;
           
-          switch (cmd){
+          switch (message.name){
                 case "GET_REQUEST":
-                    String response = isObject.readUTF();
-                    int result = is.read();
-                    
-                    System.out.println("réponse : "+response+" "+result);
-                    if(result == 0){
-                        FileOutputStream outstream = null;
-          
-                        String path = System.getProperty("user.dir");
-                        System.out.println("current dir = " + path);
-                        File outfile = new File(path+"C"+indice+filename);
-
-                        outstream = new FileOutputStream(outfile);
-
-                        while((length = is.read(buffer)) > 0)
-                          {
-                              outstream.write(buffer,0,length);
-                          }
-                        outstream.close();
-                        System.out.println("l'écriture du fichier a marché =)");
-                    }
+//                    String response = isObject.readUTF();
+//                    int result = is.read();
+//                    
+//                    System.out.println("réponse : "+response+" "+result);
+//                    if(result == 0){
+//                        FileOutputStream outstream = null;
+//          
+//                        String path = System.getProperty("user.dir");
+//                        System.out.println("current dir = " + path);
+//                        File outfile = new File(path+"C"+indice+message.filename);
+//
+//                        outstream = new FileOutputStream(outfile);
+//
+//                        while((length = is.read(buffer)) > 0)
+//                          {
+//                              outstream.write(buffer,0,length);
+//                          }
+//                        outstream.close();
+//                        System.out.println("l'écriture du fichier a marché =)");
+//                    }
                     
                     break;
                 case "PUT_REQUEST":
                   //on cree un objet file pour le fichier que detient le client
-                  File infile = new File(filename);
+                  File infile = new File(message.filename);
                   System.out.println(infile.exists());
                   
                   //on cree un flux qui permet de communiquer avec le fichier
