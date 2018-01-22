@@ -10,7 +10,9 @@ package sartp1;
  * @author gardellc
  */
 public class Download {
-    byte[][] fileBytes;
+    private byte[][] fileBytes = null;
+    private String fileName;
+    private int lastLenght;
 
     public Download() {
     }
@@ -22,5 +24,27 @@ public class Download {
     public void setFileBytes(byte[][] fileBytes) {
         this.fileBytes = fileBytes;
     }
+    
+    public void addPartOfFile(int i, byte[] tab){
+        this.fileBytes[i] = tab;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public int getLastLenght() {
+        return lastLenght;
+    }
+
+    public void setLastLenght(int lastLenght) {
+        this.lastLenght = lastLenght;
+    }
+    
+    
     
 }
