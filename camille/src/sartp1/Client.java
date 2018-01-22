@@ -5,26 +5,12 @@
  */
 package sartp1;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.io.File;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  *
@@ -42,40 +28,22 @@ public class Client {
         
         try {
             SocketChannel socket = SocketChannel.open();
-        
             socket.connect(new InetSocketAddress(hostname,port));
-//
-//            TestObject message = new TestObject("c'est gagné!", 45);
-//
-//            try (ObjectOutputStream oos = new 
-//                                  ObjectOutputStream(socket.socket().getOutputStream())) {
-//                oos.writeObject(message);
-//            }
+            
+            System.out.println("connécté à "+hostname+" sur le port "+port);
+            
+            Message message = new GetRequest("test.odt");
+            
+            ObjectOutputStream oos = new 
+                              ObjectOutputStream(socket.socket().getOutputStream());
+            File file = new File("test.odt");
+            System.out.println(file.exists());
+            oos.writeObject(file);
+            
+            
+            
+            
 
-          System.out.println("connécté à "+hostname+" sur le port "+port);
-//          
-//          InputStream is = theSocket.getInputStream();
-//          OutputStream os = theSocket.getOutputStream();
-//          
-//          String cmd = "GET_REQUEST";
-//          String filename = "test.odt";
-//          Message message = new GetReply("test.odt");
-//          
-          ///////////Envoie de la commande et du nom de fichier//////////////
-//          DataOutputStream osObject = new DataOutputStream(os);
-//          osObject.writeUTF(message.name);
-//          osObject.writeUTF(message.filename);
-//          
-//          DataInputStream isObject = new DataInputStream(is);
-//          
-//          int indice = is.read();
-//          
-//          System.out.println("le Client envoie un "+message.name+" de "+message.filename);
-//          
-//          byte[] buffer = new byte[1024];
-//          int length;
-//          
-//          switch (message.name){
 //                case "GET_REQUEST":
 //                    String response = isObject.readUTF();
 //                    int result = is.read();
@@ -97,8 +65,7 @@ public class Client {
 //                        outstream.close();
 //                        System.out.println("l'écriture du fichier a marché =)");
 //                    }
-//                    
-//                    break;
+
 //                case "PUT_REQUEST":
 //                  //on cree un objet file pour le fichier que detient le client
 //                  File infile = new File(message.filename);
@@ -131,9 +98,6 @@ public class Client {
           System.err.println(ex);
         } catch (IOException ex) {
           System.err.println(ex);
-        } 
-        
-        
+        }
     }
-    
 }

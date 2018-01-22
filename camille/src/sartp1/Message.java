@@ -17,6 +17,8 @@ import java.io.Serializable;
  */
 public abstract class Message implements Serializable{
     
+    public abstract void read();
+    
     public abstract void send(OutputStream os);
     
     public abstract void receive(InputStream is);

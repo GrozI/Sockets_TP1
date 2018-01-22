@@ -15,26 +15,14 @@ package sartp1;
  * For a commercial use license, or to purchase the book, 
  * please visit http://www.davidflanagan.com/javaexamples3.
  */
-import java.io.Console;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.File;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -43,131 +31,95 @@ import java.nio.file.Paths;
  * connections.
  */
 public class Server {
-  public static void main(String args[]) throws java.io.IOException {
-    // RFC867 specifies port 13 for this service. On Unix platforms,
-    // you need to be running as root to use that port, so we allow
-    // this service to use other ports for testing.
+    public static void main(String args[]){
     
-    int port = 2000; //au dessus de 1024 sur linux
-//    if (args.length > 0){
-//        port = Integer.parseInt(args[0]);
-//    }
+        int port = 2000; //au dessus de 1024 sur linux
+    //    if (args.length > 0){
+    //        port = Integer.parseInt(args[0]);
+    //    }
 
-    ServerSocketChannel server = ServerSocketChannel.open();
-    server.socket().bind(new InetSocketAddress(port));
-//        System.out.println(server.toString());
+        String repertory = System.getProperty("user.dir");
+        System.out.println("current dir: "+repertory);
 
-    for (;;) {
-        SocketChannel client = server.accept();
-        System.out.println("Connexion ouverte");
+        try {
+            ServerSocketChannel server = ServerSocketChannel.open();
+            server.socket().bind(new InetSocketAddress(port));
+            
+            for (;;) {
+                SocketChannel client = server.accept();
+                System.out.println("Connexion ouverte");
 
-        ObjectInputStream ois = 
-                 new ObjectInputStream(client.socket().getInputStream());
+                ObjectInputStream ois = 
+                         new ObjectInputStream(client.socket().getInputStream());
+                
+                File file = (File) ois.readObject();
+                System.out.println(file.toString());
+            }
 
-//        TestObject test = (TestObject)ois.readObject();
-//        test.read();
+
+    //                case "GET_REQUEST":
+    ////                    System.out.println("c'est bon!");
+    //                    //on cree un objet file pour le fichier que detient le serveur
+    //                    File infile = new File(file);
+    //                    System.out.println(infile.exists());
+    //
+    //                    if (infile.exists()){
+    //                        FileInputStream instream = null;
+    //                        instream = new FileInputStream(infile);
+    //
+    //                        while((length = instream.read(buffer)) > 0)
+    //                        {
+    //            //              System.out.println("sfj");
+    //                            os.write(buffer,0,length);
+    //                        }
+    //
+    //                        instream.close();
+    //                        osObject.writeUTF("GET_REPLY");
+    //                        os.write(0);
+    //                    } else {
+    //                        osObject.writeUTF("GET_REPLY");
+    //                        os.write(1);
+    //                    }
+    //                    //on cree un flux qui permet de communiquer avec le fichier
+    //                    break;
+    //                case "PUT_REQUEST":
+    //                    FileOutputStream outstream = null;
+    //          
+    //                    String path = System.getProperty("user.dir");
+    //          //        System.out.println("current dir = " + path);
+    //                    File outfile = new File(path+"S"+numConnect+file);
+    //                    System.out.println("le fichier existe : "+outfile.exists());
+    //                    if (outfile.exists()){
+    //                        int i=1;
+    //                        //outfile =  new File(path)
+    //                    }
+    //                    
+    //                    outstream = new FileOutputStream(outfile);
+    //
+    //                    while((length = is.read(buffer)) > 0)
+    //                      {
+    //                          outstream.write(buffer,0,length);
+    //                      }
+    //                    
+    //                    outstream.close();
+    //                    break;
+    //                default:
+    //                    System.out.println("la commande passée est inconnue");
+    //            }
+
+    //        }
+    //        catch(IOException ioe)
+    //        {
+    //            ioe.printStackTrace();
+    //        }
+    //        
+    //        client.close();
+    //        System.out.println("serveur fermé");
+    //    }
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
-    
-//    String repertory = System.getProperty("user.dir");
-//    System.out.println("current dir: "+repertory);
-//    
-//    // Create a channel to listen for connections on.
-//    ServerSocketChannel server = ServerSocketChannel.open();
-//    
-//    // Bind the channel to a local port. Note that we do this by obtaining
-//    // the underlying java.net.ServerSocket and binding that socket.
-//    server.socket().bind(new InetSocketAddress(port));
-//    System.out.println(server.toString());
-//    
-//    // Get an encoder for converting strings to bytes
-//    CharsetEncoder encoder = Charset.forName("US-ASCII").newEncoder();
-//    //nombre de connexion faites sur la socket ouverte cote serveur
-//    int numConnect = 0;
-//    
-//    
-//    for (;;) { // Loop forever, processing client connections
-//        // Wait for a client to connect
-//        SocketChannel client = server.accept();
-//        System.out.println("Connexion ouverte");
-//        numConnect++;
-//
-//        try 
-//        {
-//            ObjectInputStream ois = 
-//                 new ObjectInputStream(client.socket().getInputStream());
-//
-//            TestObject test = (TestObject)ois.readObject();
-//            System.out.println("object: " + test.getName() + " " + test.getNumber());
-//            
-//            
-//            switch (cmd){
-//                case "GET_REQUEST":
-////                    System.out.println("c'est bon!");
-//                    //on cree un objet file pour le fichier que detient le serveur
-//                    File infile = new File(file);
-//                    System.out.println(infile.exists());
-//
-//                    if (infile.exists()){
-//                        FileInputStream instream = null;
-//                        instream = new FileInputStream(infile);
-//
-//                        while((length = instream.read(buffer)) > 0)
-//                        {
-//            //              System.out.println("sfj");
-//                            os.write(buffer,0,length);
-//                        }
-//
-//                        instream.close();
-//                        osObject.writeUTF("GET_REPLY");
-//                        os.write(0);
-//                    } else {
-//                        osObject.writeUTF("GET_REPLY");
-//                        os.write(1);
-//                    }
-//                    //on cree un flux qui permet de communiquer avec le fichier
-//                    break;
-//                case "PUT_REQUEST":
-//                    FileOutputStream outstream = null;
-//          
-//                    String path = System.getProperty("user.dir");
-//          //        System.out.println("current dir = " + path);
-//                    File outfile = new File(path+"S"+numConnect+file);
-//                    System.out.println("le fichier existe : "+outfile.exists());
-//                    if (outfile.exists()){
-//                        int i=1;
-//                        //outfile =  new File(path)
-//                    }
-//                    
-//                    outstream = new FileOutputStream(outfile);
-//
-//                    while((length = is.read(buffer)) > 0)
-//                      {
-//                          outstream.write(buffer,0,length);
-//                      }
-//                    
-//                    outstream.close();
-//                    break;
-//                default:
-//                    System.out.println("la commande passée est inconnue");
-//            }
-//            
-//            
-//        osObject.close();
-//        isObject.close();
-//        os.close();
-//        is.close();
-//            
-//        System.out.println("Connexion fermée");   
-//
-//        }
-//        catch(IOException ioe)
-//        {
-//            ioe.printStackTrace();
-//        }
-//        
-//        client.close();
-//        System.out.println("serveur fermé");
-//    }
-  }
 }
