@@ -6,6 +6,8 @@
 package sartp1;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.io.ObjectOutputStream;
@@ -36,9 +38,8 @@ public class Client {
             
             ObjectOutputStream oos = new 
                               ObjectOutputStream(socket.socket().getOutputStream());
-            File file = new File("test.odt");
-            System.out.println(file.exists());
-            oos.writeObject(file);
+//            File file = new File("test.odt");
+            message.send(oos);
             
             
             

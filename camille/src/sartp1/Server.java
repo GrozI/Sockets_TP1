@@ -16,6 +16,8 @@ package sartp1;
  * please visit http://www.davidflanagan.com/javaexamples3.
  */
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -52,11 +54,17 @@ public class Server {
                 ObjectInputStream ois = 
                          new ObjectInputStream(client.socket().getInputStream());
                 
-                File file = (File) ois.readObject();
-                System.out.println(file.toString());
+//                File file = (File) ois.readObject();
+                Message message = (Message) ois.readObject();
+                message.receive(ois);
+                
             }
+            
+            
 
-
+//            //on cree un buffer
+//            byte[] buffer = new byte[1024];
+//            int length;
     //                case "GET_REQUEST":
     ////                    System.out.println("c'est bon!");
     //                    //on cree un objet file pour le fichier que detient le serveur
