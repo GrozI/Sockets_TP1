@@ -23,63 +23,50 @@ import java.util.logging.Logger;
  */
 public class GetRequest extends Message{
     
-    String File;
-    byte[] buffer = new byte[1024];
-    int length;
+    String file;
 
     public GetRequest(String File) {
-        this.File = File;
+        this.file = File;
     }
 
     public String getFile() {
-        return File;
-    }
-
-    @Override
-    //c'est le client qui envoie
-    public void send(ObjectOutputStream oos) {
-        //initialisation du buffer et du fichier
-        try{
-            File clientFile = new File("clientFile.odt");
-            clientFile.toPath();
-            FileOutputStream fos = new FileOutputStream(clientFile);
-            fos.write(57);
-            fos.close();
-            
-            //on lit l'entier et on le met dans le buffer
-            FileInputStream fis = new FileInputStream(clientFile);
-            this.length = fis.read(this.buffer);
-//            oos.writeObject(buffer);
-            fis.close();
-            
-            //envoie le message
-            oos.writeObject(this);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GetRequest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(GetRequest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        return file;
     }
 
     @Override
     //c'est le serveur qui recoit
-    public void receive(ObjectInputStream ois) {
+    public void handle(ObjectOutputStream oos, Download download) {
         try{
+            byte[] buffer = new byte[1000];
+            int length = 0;
+            
+            File serverFile = new File(this.file);
+            
+            //on lit le fichier et on le met dans le buffer
+            FileInputStream fis = new FileInputStream(serverFile);
+            length = fis.read(buffer);
+            System.out.println("Creation du get_reply");
+            Message message = new GetReply("clientFile.odt", buffer, length);
+//            int i=0;
+//            while ((length = fis.read(buffer)) != -1){
+//                Message message = new GetReply("clientFile.odt",buffer, length, i*1000);
+//                System.out.println(i + " " + length + "offset: "+i*1000);
+//                oos.writeObject(message);
+//                i++;
+//            }
+            fis.close();
             //initialisation du fichier
-            File serverFile = new File("serverFile.odt");
-            serverFile.toPath();
+//            File serverFile = new File("serverFile.odt");
+//            serverFile.toPath();
             //remplissage du fichier
-            FileOutputStream fos = new FileOutputStream(serverFile);
-            fos.write(this.buffer,0,this.length);
-            fos.close();
+//            FileOutputStream fos = new FileOutputStream(serverFile);
+//            fos.write(this.buffer,0,this.length);
+//            fos.close();
+            message.send(oos);
+            System.out.println("envoie de get_reply");
         } catch (IOException ex) {
             Logger.getLogger(GetRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Override
-    public void read() {
-        System.out.println("Message: " + this.getClass().getName() + "  " + this.getFile());
     }
     
 }

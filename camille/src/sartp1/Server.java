@@ -23,6 +23,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,7 +35,7 @@ import java.util.logging.Logger;
  */
 public class Server {
     public static void main(String args[]){
-    
+        Download download = new Download();
         int port = 2000; //au dessus de 1024 sur linux
     //    if (args.length > 0){
     //        port = Integer.parseInt(args[0]);
@@ -53,10 +54,14 @@ public class Server {
 
                 ObjectInputStream ois = 
                          new ObjectInputStream(client.socket().getInputStream());
-                
+                ObjectOutputStream oos = new 
+                              ObjectOutputStream(client.socket().getOutputStream());
 //                File file = (File) ois.readObject();
+                
                 Message message = (Message) ois.readObject();
-                message.receive(ois);
+                System.out.println("reception du get_request");
+                message.handle(oos, download);
+                
                 
             }
             

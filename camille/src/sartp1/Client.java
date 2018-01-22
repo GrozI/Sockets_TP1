@@ -9,17 +9,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.UnknownHostException;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author gardellc
  */
 public class Client {
-
     /**
      * @param args the command line arguments
      */
@@ -27,20 +29,28 @@ public class Client {
         // TODO code application logic here
         String hostname = "localhost";
         int port = 2000;
-        
+        Download download = new Download();
+        boolean complete = false;
+                
         try {
             SocketChannel socket = SocketChannel.open();
             socket.connect(new InetSocketAddress(hostname,port));
             
             System.out.println("connécté à "+hostname+" sur le port "+port);
             
-            Message message = new GetRequest("test.odt");
+            Message messageStart = new GetRequest("test.odt");
             
             ObjectOutputStream oos = new 
                               ObjectOutputStream(socket.socket().getOutputStream());
+            ObjectInputStream ois = new 
+                              ObjectInputStream(socket.socket().getInputStream());
 //            File file = new File("test.odt");
-            message.send(oos);
+            messageStart.send(oos);
+            System.out.println("Envoie du get_request");
             
+            Message message = (Message) ois.readObject();
+            System.out.println("Lecture du get_reply");
+            message.handle(oos, download);
             
             
             
@@ -99,6 +109,8 @@ public class Client {
           System.err.println(ex);
         } catch (IOException ex) {
           System.err.println(ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

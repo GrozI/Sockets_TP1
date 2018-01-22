@@ -12,6 +12,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,9 +21,13 @@ import java.io.Serializable;
  */
 public abstract class Message implements Serializable{
     
-    public abstract void read();
+    public void send(ObjectOutputStream oos){
+        try {
+            oos.writeObject(this);
+        } catch (IOException ex) {
+            Logger.getLogger(Message.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
-    public abstract void send(ObjectOutputStream oos);
-    
-    public abstract void receive(ObjectInputStream ois);
+    public abstract void handle(ObjectOutputStream oos, Download download);
 }
