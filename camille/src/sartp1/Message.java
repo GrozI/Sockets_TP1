@@ -9,33 +9,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 /**
  *
  * @author gardellc
  */
-public abstract class Message {
-    protected String name;
-    protected String filename;
-
-    public Message() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
+public abstract class Message implements Serializable{
     
-    
-    
-    public void send(OutputStream os) throws IOException{
-        DataOutputStream osObject = new DataOutputStream(os);
-        osObject.writeUTF(this.name);
-        osObject.writeUTF(this.filename);
-    };
+    public abstract void send(OutputStream os);
     
     public abstract void receive(InputStream is);
 }

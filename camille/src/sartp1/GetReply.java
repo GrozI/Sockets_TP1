@@ -5,6 +5,9 @@
  */
 package sartp1;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -12,10 +15,10 @@ import java.io.OutputStream;
  *
  * @author gardellc
  */
-public class Put extends Message{
+public class GetReply extends Message{
+    protected String filename;
 
-    public Put(String filename) {
-        this.name = "PUT";
+    public GetReply(String filename) {
         this.filename = filename;
     }
 
@@ -28,5 +31,6 @@ public class Put extends Message{
     public void receive(InputStream is) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
     
 }

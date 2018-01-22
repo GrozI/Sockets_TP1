@@ -17,9 +17,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.channels.SocketChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -38,33 +41,42 @@ public class Client {
         int port = 2000;
         
         try {
+            SocketChannel socket = SocketChannel.open();
+        
+            socket.connect(new InetSocketAddress(hostname,port));
+//
+//            TestObject message = new TestObject("c'est gagné!", 45);
+//
+//            try (ObjectOutputStream oos = new 
+//                                  ObjectOutputStream(socket.socket().getOutputStream())) {
+//                oos.writeObject(message);
+//            }
 
-          Socket theSocket = new Socket(hostname, port );
           System.out.println("connécté à "+hostname+" sur le port "+port);
-          
-          InputStream is = theSocket.getInputStream();
-          OutputStream os = theSocket.getOutputStream();
-          
+//          
+//          InputStream is = theSocket.getInputStream();
+//          OutputStream os = theSocket.getOutputStream();
+//          
 //          String cmd = "GET_REQUEST";
 //          String filename = "test.odt";
-          Message message = new Get("test.odt");
-          
-          /////////////Envoie de la commande et du nom de fichier//////////////
+//          Message message = new GetReply("test.odt");
+//          
+          ///////////Envoie de la commande et du nom de fichier//////////////
 //          DataOutputStream osObject = new DataOutputStream(os);
 //          osObject.writeUTF(message.name);
 //          osObject.writeUTF(message.filename);
-          
-          DataInputStream isObject = new DataInputStream(is);
-          
-          int indice = is.read();
-          
-          System.out.println("le Client envoie un "+message.name+" de "+message.filename);
-          
-          byte[] buffer = new byte[1024];
-          int length;
-          
-          switch (message.name){
-                case "GET_REQUEST":
+//          
+//          DataInputStream isObject = new DataInputStream(is);
+//          
+//          int indice = is.read();
+//          
+//          System.out.println("le Client envoie un "+message.name+" de "+message.filename);
+//          
+//          byte[] buffer = new byte[1024];
+//          int length;
+//          
+//          switch (message.name){
+//                case "GET_REQUEST":
 //                    String response = isObject.readUTF();
 //                    int result = is.read();
 //                    
@@ -85,35 +97,35 @@ public class Client {
 //                        outstream.close();
 //                        System.out.println("l'écriture du fichier a marché =)");
 //                    }
-                    
-                    break;
-                case "PUT_REQUEST":
-                  //on cree un objet file pour le fichier que detient le client
-                  File infile = new File(message.filename);
-                  System.out.println(infile.exists());
-                  
-                  //on cree un flux qui permet de communiquer avec le fichier
-                  FileInputStream isFile = null;
-                  isFile = new FileInputStream(infile);
-                  
-                  while((length = isFile.read(buffer)) > 0)
-                  {
-        //            System.out.println("sfj");
-                      os.write(buffer,0,length);
-                  }
-                  
-                  isFile.close();
-                  
-                  System.out.println("l'envoi du fichier a marché =)");
-                    break;
-                default:
-                    System.out.println("la commande passée est inconnue");
-          }
-          os.close();
-          is.close();
-          
-          
-          
+//                    
+//                    break;
+//                case "PUT_REQUEST":
+//                  //on cree un objet file pour le fichier que detient le client
+//                  File infile = new File(message.filename);
+//                  System.out.println(infile.exists());
+//                  
+//                  //on cree un flux qui permet de communiquer avec le fichier
+//                  FileInputStream isFile = null;
+//                  isFile = new FileInputStream(infile);
+//                  
+//                  while((length = isFile.read(buffer)) > 0)
+//                  {
+//        //            System.out.println("sfj");
+//                      os.write(buffer,0,length);
+//                  }
+//                  
+//                  isFile.close();
+//                  
+//                  System.out.println("l'envoi du fichier a marché =)");
+//                    break;
+//                default:
+//                    System.out.println("la commande passée est inconnue");
+//          }
+//          os.close();
+//          is.close();
+//          
+//          
+//          
         } // end try
         catch (UnknownHostException ex) {
           System.err.println(ex);

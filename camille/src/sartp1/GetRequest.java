@@ -5,9 +5,6 @@
  */
 package sartp1;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -15,22 +12,28 @@ import java.io.OutputStream;
  *
  * @author gardellc
  */
-public class Get extends Message{
+public class GetRequest extends Message{
+    
+    String File;
 
-    public Get(String filename) {
-        this.name = "GET";
-        this.filename = filename;
+    public GetRequest(String File) {
+        this.File = File;
+    }
+
+    public String getFile() {
+        return File;
     }
 
     @Override
+    //c'est le client qui envoie
     public void send(OutputStream os) {
-        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
+    //c'est le serveur qui recoit
     public void receive(InputStream is) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
     
 }
