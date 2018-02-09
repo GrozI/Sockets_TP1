@@ -48,7 +48,7 @@ public class GetRequest extends Message{
             
             int i=1;
             while ((length = fis.read(buffer)) != -1){
-                Message message = new GetReply("clientFile.odt", buffer, length, i, maxindex);
+                Message message = new GetReply("client"+fileName, buffer, length, i, maxindex);
                 System.out.println(i + " " + length );
                 message.send(oos);
                 i++;

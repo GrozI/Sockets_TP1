@@ -112,8 +112,8 @@ public class FTPClient {
                     }
                     
                     if (tokens[0].equals("get")){
-                       if (tokens.length == 1){
-                            Message m = new GetRequest("test.odt");
+                       if (tokens.length == 2){
+                            Message m = new GetRequest(tokens[1]);
 //                              Message m = new GetRequest("mesureInvariante.pdf");
                             m.send(oos);
                             state.setDownloading(true);
@@ -122,7 +122,7 @@ public class FTPClient {
                                 mResponse.handle(oos, state);
                             }
                        }else{
-                           System.out.println("get ne prend pas d'arguments pour le moment");
+                           System.out.println("get prend un seul argument pour le moment");
                        }
                     }
                     
