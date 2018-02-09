@@ -18,39 +18,33 @@ import java.util.logging.Logger;
  */
 public class GetRequest extends Message{
     
-    String file;
+    String fileName;
 
-    public GetRequest(String File) {
-        this.file = File;
-    }
-
-    public String getFile() {
-        return file;
+    public GetRequest(String file) {
+        this.fileName = file;
     }
 
     @Override
-    //c'est le serveur qui recoit
-    public void handle(ObjectOutputStream oos, Download download) {
+    //c'est le serveur qui recoits
+    public void handle(ObjectOutputStream oos, State state) {
         try{
             byte[] buffer = new byte[1000];
             int length = 0;
             int maxindex;
             
-            File serverFile = new File(this.file);
+            File file = new File(System.getProperty("user.dir")+state.getAbstractPath()+"\\"+fileName);
             //on lit le fichier et on le met dans le buffer
-            FileInputStream fis = new FileInputStream(serverFile);
+            FileInputStream fis = new FileInputStream(file);
 //            length = fis.read(buffer);
 //            System.out.println("Creation du get_reply");
 //            Message message = new GetReply("clientFile.odt", buffer, length);
             
             //initialisation du telechargement
-            if (serverFile.length()%1000 != 0){
-                maxindex = (int) (serverFile.length()/1000 + 1);
+            if (file.length()%1000 != 0){
+                maxindex = (int) (file.length()/1000 + 1);
             }else{
-                maxindex = (int) (serverFile.length()/1000);
+                maxindex = (int) (file.length()/1000);
             }
-            download.setFileName("clientFile.odt");
-            
             
             int i=1;
             while ((length = fis.read(buffer)) != -1){
@@ -69,7 +63,7 @@ public class GetRequest extends Message{
 //            FileOutputStream fos = new FileOutputStream(serverFile);
 //            fos.write(this.buffer,0,this.length);
 //            fos.close();
-            System.out.println("envoie des get_reply");
+            System.out.println("l'envoie des get_reply est terminé");
         } catch (IOException ex) {
             Logger.getLogger(GetRequest.class.getName()).log(Level.SEVERE, null, ex);
         }

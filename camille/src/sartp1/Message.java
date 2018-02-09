@@ -29,5 +29,5 @@ public abstract class Message implements Serializable{
         }
     }
     
-    public abstract void handle(ObjectOutputStream oos, Download download);
+    public abstract void handle(ObjectOutputStream oos, State state);
 }

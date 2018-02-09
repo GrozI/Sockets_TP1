@@ -39,43 +39,13 @@ public class GetReply extends Message{
     }
     
     @Override
-    public void handle(ObjectOutputStream oos, Download download) {
-            
+    public void handle(ObjectOutputStream oos, State state) {
         try {
-            //initialisation du fichier
-            File serverFile = new File(file);
-            System.out.println("Creation du fichier");
-            
-            if(download.getFileBytes() == null){
-                download.setFileBytes(new byte[maxindex][1000]);
-                download.setFileName(file);
-            }
-            
-            //remplissage du fichier
-//            FileOutputStream fos = new FileOutputStream(serverFile);
-//            fos.write(buffer,0,length);
-//            fos.close();
-            download.addPartOfFile(index-1, buffer);
-            
-            if (index == maxindex){
-                download.setLastLenght(length);
-            }
-            
-            boolean test = true;
-            for (int i=0;i<maxindex;i++){
-                test = test && (download.getFileBytes()[i] != null);
-            }
-            
-            if(test == true){
-                
-            }
-            
-            System.out.println("Fichier rempli");
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GetReply.class.getName()).log(Level.SEVERE, null, ex);
+            state.populate(file, buffer, length, index, maxindex);
         } catch (IOException ex) {
             Logger.getLogger(GetReply.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     

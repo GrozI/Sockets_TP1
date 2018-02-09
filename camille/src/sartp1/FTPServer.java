@@ -33,15 +33,18 @@ import java.util.logging.Logger;
  * implementation lacks meaningful exception handling and cannot handle UDP
  * connections.
  */
-public class Server {
-    public static void main(String args[]){
-        Download download = new Download();
+public class FTPServer {
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) throws ClassNotFoundException{
         int port = 2000; //au dessus de 1024 sur linux
     //    if (args.length > 0){
     //        port = Integer.parseInt(args[0]);
     //    }
 
         String repertory = System.getProperty("user.dir");
+        String abstractPath = "";
         System.out.println("current dir: "+repertory);
 
         try {
@@ -50,6 +53,7 @@ public class Server {
             
             for (;;) {
                 SocketChannel client = server.accept();
+                State state = new State();
                 System.out.println("Connexion ouverte");
 
                 ObjectInputStream ois = 
@@ -58,9 +62,11 @@ public class Server {
                               ObjectOutputStream(client.socket().getOutputStream());
 //                File file = (File) ois.readObject();
                 
-                Message message = (Message) ois.readObject();
-                System.out.println("reception du get_request");
-                message.handle(oos, download);
+                while(true){
+                    Message message = (Message) ois.readObject();
+                    message.handle(oos, state);
+                }
+                
                 
                 
             }
@@ -130,9 +136,10 @@ public class Server {
     //        System.out.println("serveur fermé");
     //    }
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FTPServer.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ClassNotFoundException ex) {
+//            Logger.getLogger(FTPServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 }

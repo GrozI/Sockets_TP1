@@ -2,6 +2,14 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Camille%20Gardelle/Documents/Ensimag/3A/Sockets_TP1/camille/src/sartp1/FTPClient.java</file>
+            <file>file:/C:/Users/Camille%20Gardelle/Documents/Ensimag/3A/Sockets_TP1/camille/src/sartp1/State.java</file>
+            <file>file:/C:/Users/Camille%20Gardelle/Documents/Ensimag/3A/Sockets_TP1/camille/src/sartp1/CdRequest.java</file>
+            <file>file:/C:/Users/Camille%20Gardelle/Documents/Ensimag/3A/Sockets_TP1/camille/src/sartp1/LsRequest.java</file>
+            <file>file:/C:/Users/Camille%20Gardelle/Documents/Ensimag/3A/Sockets_TP1/camille/src/sartp1/GetRequest.java</file>
+            <file>file:/C:/Users/Camille%20Gardelle/Documents/Ensimag/3A/Sockets_TP1/camille/src/sartp1/Download.java</file>
+            <file>file:/C:/Users/Camille%20Gardelle/Documents/Ensimag/3A/Sockets_TP1/camille/src/sartp1/GetReply.java</file>
+        </group>
     </open-files>
 </project-private>
