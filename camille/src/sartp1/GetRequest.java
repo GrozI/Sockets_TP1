@@ -33,36 +33,37 @@ public class GetRequest extends Message{
             int maxindex;
             
             File file = new File(System.getProperty("user.dir")+state.getAbstractPath()+"\\"+fileName);
-            //on lit le fichier et on le met dans le buffer
-            FileInputStream fis = new FileInputStream(file);
-//            length = fis.read(buffer);
-//            System.out.println("Creation du get_reply");
-//            Message message = new GetReply("clientFile.odt", buffer, length);
-            
-            //initialisation du telechargement
-            if (file.length()%1000 != 0){
-                maxindex = (int) (file.length()/1000 + 1);
+            if (file.exists()){
+                if(!file.isDirectory() && !file.isHidden()){
+                    //on lit le fichier et on le met dans le buffer
+                    FileInputStream fis = new FileInputStream(file);
+
+                    //initialisation du telechargement
+                    if (file.length()%1000 != 0){
+                        maxindex = (int) (file.length()/1000 + 1);
+                    }else{
+                        maxindex = (int) (file.length()/1000);
+                    }
+
+                    int i=1;
+                    while ((length = fis.read(buffer)) != -1){
+                        Message message = new GetReply(true,"client"+fileName, buffer, length, i, maxindex);
+                        System.out.println(i + " " + length );
+                        message.send(oos);
+                        i++;
+                    }
+                    fis.close();
+                    
+                }
+                else{
+                    Message message = new GetReply(false,"Vous n'avez pas les droits pour télécharger ce type de fichier", buffer, 0, 0, 0);
+                    message.send(oos);
+                }
             }else{
-                maxindex = (int) (file.length()/1000);
-            }
-            
-            int i=1;
-            while ((length = fis.read(buffer)) != -1){
-                Message message = new GetReply("client"+fileName, buffer, length, i, maxindex);
-                System.out.println(i + " " + length );
+                Message message = new GetReply(false,"Le fichier "+ fileName +" n'existe pas", buffer, 0, 0, 0);
                 message.send(oos);
-                i++;
             }
-            fis.close();
             
-            
-            //initialisation du fichier
-//            File serverFile = new File("serverFile.odt");
-//            serverFile.toPath();
-            //remplissage du fichier
-//            FileOutputStream fos = new FileOutputStream(serverFile);
-//            fos.write(this.buffer,0,this.length);
-//            fos.close();
             System.out.println("l'envoie des get_reply est terminé");
         } catch (IOException ex) {
             Logger.getLogger(GetRequest.class.getName()).log(Level.SEVERE, null, ex);

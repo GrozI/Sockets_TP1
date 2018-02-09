@@ -57,7 +57,8 @@ public class FTPClient {
                         if (tokens.length == 3){
                             channel = SocketChannel.open();
                             try{
-                                channel.connect(new InetSocketAddress(tokens[1], 2000 ));
+                                int port = Integer.parseInt(tokens[2]);
+                                channel.connect(new InetSocketAddress(tokens[1], port ));
                                 System.out.println("connected");
                                 connected = true;
                                 abstractPath = "Server:";
@@ -67,7 +68,7 @@ public class FTPClient {
                             oos = new ObjectOutputStream(channel.socket().getOutputStream());
                             ois = new ObjectInputStream(channel.socket().getInputStream());
                         }else{
-                            System.out.println("la commande connect prend deux arguments");
+                            System.out.println("la commande connect prend deux arguments : l'adresse et le port du serveur");
                         }
                     }
                 }
@@ -112,17 +113,19 @@ public class FTPClient {
                     }
                     
                     if (tokens[0].equals("get")){
-                       if (tokens.length == 2){
+                       if (tokens.length == 3){
                             Message m = new GetRequest(tokens[1]);
-//                              Message m = new GetRequest("mesureInvariante.pdf");
                             m.send(oos);
+                            //on indique qu'on est en téléchargement
                             state.setDownloading(true);
+                            state.setFileName(tokens[2]);
+                            //propriété de TCP : on va recevoir les messages dans l'ordre
                             while (state.isDownloading()){
                                 Message mResponse = (Message) ois.readObject();
                                 mResponse.handle(oos, state);
                             }
                        }else{
-                           System.out.println("get prend un seul argument pour le moment");
+                           System.out.println("get prend deux arguments : le fichier à télecharger et le nom du nouveau fichier");
                        }
                     }
                     

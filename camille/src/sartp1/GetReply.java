@@ -23,14 +23,15 @@ import java.util.logging.Logger;
  */
 public class GetReply extends Message{
     
-    String file;
+    String file; //contient le nom du fichier ou le message d'erreur
     byte[] buffer;
     int length;
     int index;
     int maxindex;
+    boolean ok;
     
-    
-    public GetReply(String file, byte[] buffer, int length, int index, int maxindex) {
+    public GetReply(boolean ok, String file, byte[] buffer, int length, int index, int maxindex) {
+        this.ok = ok;
         this.file = file;
         this.buffer = buffer;
         this.length = length;
@@ -40,11 +41,16 @@ public class GetReply extends Message{
     
     @Override
     public void handle(ObjectOutputStream oos, State state) {
-        try {
-            state.populate(file, buffer, length, index, maxindex);
-        } catch (IOException ex) {
-            Logger.getLogger(GetReply.class.getName()).log(Level.SEVERE, null, ex);
+        if (ok){
+            try {
+                state.populate(file, buffer, length, index, maxindex);
+            } catch (IOException ex) {
+                Logger.getLogger(GetReply.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            System.out.println(file);
         }
+        
         
     }
     

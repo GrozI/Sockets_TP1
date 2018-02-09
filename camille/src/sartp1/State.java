@@ -45,31 +45,42 @@ public class State {
     
     public void initialiseFile(String file, byte[] buffer, int length, int maxindex){
         fileBytes = new byte[maxindex][length];
-        fileName = file;
         indexMax = maxindex;
     }
     
     public void populate(String file, byte[] buffer, int length, int index, int maxindex) throws FileNotFoundException, IOException{
+        int j;
         if (index == 1){
             initialiseFile(file, buffer, length, maxindex);
         }
         if (index != indexMax){
-            this.fileBytes[index-1]= buffer;
+            for(j=0;j<1000;j++){
+                this.fileBytes[index-1][j]= buffer[j];
+            }
+            
         }else{
              //initialisation du fichier
             File clientFile = new File(file);
+            if (clientFile.exists()){
+                j=1;
+                while ((clientFile = new File(file+j)).exists()){
+                    j++;
+                }
+            }
+            
             System.out.println("Creation du fichier");
             FileOutputStream fop = new FileOutputStream(clientFile);
             
-            for (int i=0;i<maxindex;i++){
+            for (int i=0;i<maxindex-1;i++){
                 fop.write(fileBytes[i]);
+                System.out.println(i);
             }
             fop.write(buffer,0,length);
+            System.out.println("dernier");
             fop.flush();
             fop.close();
             this.setDownloading(false);
             System.out.println("Fichier rempli");
-            
 
         }
         
@@ -81,6 +92,14 @@ public class State {
 
     public void setDownloading(boolean downloading) {
         this.downloading = downloading;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
     
     
