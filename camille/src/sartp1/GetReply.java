@@ -31,14 +31,9 @@ public class GetReply extends Message{
     boolean ok;
     
     public GetReply(boolean ok, String file, byte[] buffer, int length, int index, int maxindex) {
-        int j;
         this.ok = ok;
         this.file = file;
         this.buffer = buffer;
-        for (j=0;j<1000;j++){
-            System.out.print(buffer[j]);
-        }
-        System.out.println("");
         this.length = length;
         this.index = index;
         this.maxindex = maxindex;

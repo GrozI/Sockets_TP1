@@ -54,17 +54,8 @@ public class GetRequest extends Message{
                             buf[j] = buffer[j];
                         }
                         
-                        for(j=0;j<1000;j++){
-                            System.out.print(buffer[j]);
-                        }
-                        System.out.println("");
-                        for(j=0;j<1000;j++){
-                            System.out.print(buf[j]);
-                        }
-                        
-                        System.out.println("");
-                        Message message = new GetReply(true,"client"+fileName, buf, length, i, maxindex);
-                        System.out.println(i + " " + length );
+                        Message message = new GetReply(true,fileName, buf, length, i, maxindex);
+//                        System.out.println(i + " " + length );
                         message.send(oos);
                         i++;
                     }

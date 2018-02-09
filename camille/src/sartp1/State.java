@@ -56,41 +56,29 @@ public class State {
         if (index != indexMax){
             for(j=0;j<1000;j++){
                 this.fileBytes[index-1][j]= buffer[j];
-                System.out.print(buffer[j]);
             }
-            System.out.println("");
             
         }else{
              //initialisation du fichier
-            File clientFile = new File(file);
+            File clientFile = new File(fileName);
             if (clientFile.exists()){
                 j=1;
-                while ((clientFile = new File(file+j)).exists()){
+                while ((clientFile = new File(j+fileName)).exists()){
                     j++;
                 }
             }
             
-            System.out.println("Creation du fichier");
-            FileOutputStream fop = new FileOutputStream(clientFile);
+//            System.out.println("Creation du fichier");
+            FileOutputStream fos = new FileOutputStream(clientFile);
             
             for (int i=0;i<maxindex-1;i++){
-                System.out.println(i);
-                for(j=0;j<1000;j++){
-                    System.out.print(fileBytes[i][j]);
-                }
-                System.out.println("");
-                fop.write(fileBytes[i]);
-                
+                fos.write(fileBytes[i]);
             }
-            fop.write(buffer,0,length);
-            for(j=0;j<length;j++){
-                System.out.print(buffer[j]);
-            }
-            System.out.println("dernier");
-            fop.flush();
-            fop.close();
+            fos.write(buffer,0,length);
+            fos.flush();
+            fos.close();
             this.setDownloading(false);
-            System.out.println("Fichier rempli");
+            System.out.println("Le téléchargement est terminé");
 
         }
         
