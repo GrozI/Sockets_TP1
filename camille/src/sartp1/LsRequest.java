@@ -19,7 +19,13 @@ public class LsRequest extends Message{
     
     @Override
     public void handle(ObjectOutputStream oos, State state) {
-        File dir = new File(System.getProperty("user.dir")+"\\"+state.getAbstractPath());
+        String way;
+        if (state.getAbstractPath() == ""){
+            way = System.getProperty("user.dir");
+        }else{
+            way = state.getAbstractPath();
+        }
+        File dir = new File(state.getAbstractPath());
         String childs[] = dir.list();
         for(String child: childs){
                 System.out.println(child);
