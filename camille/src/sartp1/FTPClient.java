@@ -85,7 +85,7 @@ public class FTPClient {
                             abstractPath = "Server:"+state.getAbstractPath();
                         }
                         else{
-                            System.out.println("you need to put arguments");
+                            System.out.println("cd prend un argument");
                         }
                     }
                     
@@ -132,7 +132,7 @@ public class FTPClient {
                 }
 
             } catch (IOException ex) {
-                System.out.println("petit problem");
+                
             }
 
 

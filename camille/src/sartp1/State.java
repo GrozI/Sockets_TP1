@@ -56,7 +56,9 @@ public class State {
         if (index != indexMax){
             for(j=0;j<1000;j++){
                 this.fileBytes[index-1][j]= buffer[j];
+                System.out.print(buffer[j]);
             }
+            System.out.println("");
             
         }else{
              //initialisation du fichier
@@ -72,10 +74,18 @@ public class State {
             FileOutputStream fop = new FileOutputStream(clientFile);
             
             for (int i=0;i<maxindex-1;i++){
-                fop.write(fileBytes[i]);
                 System.out.println(i);
+                for(j=0;j<1000;j++){
+                    System.out.print(fileBytes[i][j]);
+                }
+                System.out.println("");
+                fop.write(fileBytes[i]);
+                
             }
             fop.write(buffer,0,length);
+            for(j=0;j<length;j++){
+                System.out.print(buffer[j]);
+            }
             System.out.println("dernier");
             fop.flush();
             fop.close();

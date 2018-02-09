@@ -25,7 +25,7 @@ public class LsRequest extends Message{
         }else{
             way = state.getAbstractPath();
         }
-        File dir = new File(state.getAbstractPath());
+        File dir = new File(way);
         String childs[] = dir.list();
         for(String child: childs){
                 System.out.println(child);

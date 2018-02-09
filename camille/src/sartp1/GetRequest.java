@@ -46,8 +46,24 @@ public class GetRequest extends Message{
                     }
 
                     int i=1;
+                    int j;
+                    byte[] buf;
                     while ((length = fis.read(buffer)) != -1){
-                        Message message = new GetReply(true,"client"+fileName, buffer, length, i, maxindex);
+                        buf = new byte[1000];
+                        for(j=0;j<1000;j++){
+                            buf[j] = buffer[j];
+                        }
+                        
+                        for(j=0;j<1000;j++){
+                            System.out.print(buffer[j]);
+                        }
+                        System.out.println("");
+                        for(j=0;j<1000;j++){
+                            System.out.print(buf[j]);
+                        }
+                        
+                        System.out.println("");
+                        Message message = new GetReply(true,"client"+fileName, buf, length, i, maxindex);
                         System.out.println(i + " " + length );
                         message.send(oos);
                         i++;
